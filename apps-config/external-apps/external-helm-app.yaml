@@ -1,0 +1,7 @@
+#repoURL: 'https://github.com/external-org-1/repo-1.git' # Helm chart
+#path: '.'  # Path to Chart.yaml
+#revision: main
+#appName: external-app-1
+#appNamespace: external-app-1-ns
+#appType: helm
+#helmValuesFile: values.yaml # (Optional)

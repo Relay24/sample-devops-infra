@@ -1,0 +1,6 @@
+#repoURL: 'https://github.com/external-org-2/repo-2.git' # YAML manifests
+#path: '.' # Path to manifests
+#revision: 'v1.2.3'
+#appName: external-app-2
+#appNamespace: external-app-2-ns
+#appType: yaml

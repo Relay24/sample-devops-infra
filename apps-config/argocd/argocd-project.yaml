@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://kubernetes.default.svc'
+    - 'https://kubernetes-sigs.github.io/metrics-server/'
+#    - 'https://charts.bitnami.com/bitnami'
+#    - 'https://grafana.github.io/helm-charts'
+#    - 'https://prometheus-community.github.io/helm-charts'
+#    - 'https://charts.jetstack.io'
+#    - 'https://kubernetes.github.io/ingress-nginx'
+#    - 'https://helm.releases.hashicorp.com'
+  destinations:
+    - namespace: '*'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
