@@ -1,3 +1,13 @@
 # IntelliJ IDEA
 *.iml
 .idea/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+
+

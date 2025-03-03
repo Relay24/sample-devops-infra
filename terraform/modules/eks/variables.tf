@@ -18,11 +18,11 @@ variable "subnet_ids" {
   description = "List of subnet IDs for the EKS cluster"
 }
 
-variable "instance_type" {
-  type        = string
-  description = "EC2 instance type for the worker nodes"
-  default     = "t3.medium"
-}
+# variable "instance_type" {
+#   type        = string
+#   description = "EC2 instance type for the worker nodes"
+#   default     = "t3.medium"
+# }
 
 variable "min_size" {
   type = number
@@ -57,5 +57,3 @@ variable "tags" {
   default = {}
   description = "A map of tags to add to all resources"
 }
-
-# (Optional) Add variables for IRSA, node group configuration, etc.

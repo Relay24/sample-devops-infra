@@ -1,41 +1,7 @@
-variable "region" {
-  type        = string
-  description = "AWS region"
-}
-
-variable "vpc_name" {
-  type        = string
-  description = "Name of the VPC"
-}
-
-variable "cidr_block" {
-  type        = string
-  description = "CIDR block for the VPC"
-}
-
-variable "az_count" {
-  type        = number
-  description = "Number of availability zones to use."
-}
-
-variable "private_subnets" {
-  type = list(string)
-  description = "CIDR blocks for the private subnets"
-}
-
-variable "public_subnets" {
-  type = list(string)
-  description = "CIDR blocks for the public subnets"
-}
-
-variable "cluster_name" {
-  type        = string
-  description = "Name of the EKS cluster"
-}
-
 variable "cluster_version" {
   type        = string
   description = "Kubernetes version for the EKS cluster"
+  default     = "1.32"
 }
 
 variable "instance_type" {
@@ -70,10 +36,4 @@ variable "cluster_endpoint_public_access" {
 variable "cluster_endpoint_private_access" {
   type    = bool
   default = false
-}
-
-variable "tags" {
-  type = map(string)
-  default = {}
-  description = "A map of tags to add to all resources"
 }

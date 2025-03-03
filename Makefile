@@ -2,7 +2,7 @@
 
 # --- Variables (Customize these!) ---
 REGION ?= us-east-1       # AWS Region
-CLUSTER_NAME ?= my-eks-cluster # EKS Cluster Name
+CLUSTER_NAME ?= dev-my-eks-cluster # EKS Cluster Name
 REPO_URL ?= git@github.com:your-org/your-repo.git  # Your Git repo (SSH URL)
 # ------------------------------------
 
@@ -25,6 +25,7 @@ apply:
 kubeconfig:
 	@echo "Configuring kubectl..."
 	@aws eks --region $(REGION) update-kubeconfig --name $(CLUSTER_NAME)
+aws eks update-kubeconfig --name dev-my-eks-cluster --region us-east-1
 
 argocd-access:
 	@echo "Generating SSH key for ArgoCD (if needed)..."
