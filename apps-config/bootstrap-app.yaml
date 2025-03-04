@@ -3,14 +3,14 @@ kind: Application
 metadata:
   name: argocd-config
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+#  finalizers:
+#    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/apps-config.git'  # Repository with application-set.yaml
+    repoURL: 'https://github.com/Relay24/sample-devops-infra.git'  # Repository with application-set.yaml
     targetRevision: HEAD
-    path: argocd  # Watch the argocd/ directory (where application-set.yaml and argocd-project.yaml are located)
+    path: apps-config/argocd # Watch the argocd/ directory (where application-set.yaml and argocd-project.yaml are located)
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
@@ -18,7 +18,7 @@ spec:
     automated:
       prune: true  # Delete resources that do not exist in Git
       selfHeal: true # Automatically fix differences
-      pruneLast: true # Configure ArgoCD not to delete itself
+#      pruneLast: true # Configure ArgoCD not to delete itself
 
   # Ignore differences in the Application resource itself
   ignoreDifferences:

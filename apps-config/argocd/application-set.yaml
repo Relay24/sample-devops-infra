@@ -8,22 +8,22 @@ spec:
     - matrix:
         generators:
           - git: # Generator for local apps configuration files
-              repoURL: 'https://github.com/your-org/apps-config.git'
+              repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
               revision: HEAD
               directories:
-                - path: helm-apps/*
+                - path: apps-config/helm-apps/*
                   metadata:
                     labels:
                       app-type: helm
-                - path: yaml-apps/*
+                - path: apps-config/yaml-apps/*
                   metadata:
                     labels:
                       app-type: yaml
           - git:  # Generator for external apps configuration files
-              repoURL: 'https://github.com/your-org/apps-config.git'
+              repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
               revision: HEAD
               files:
-                - path: "external-apps/*.yaml"
+                - path: "apps-config/external-apps/*.yaml"
 
   template:
     metadata:
