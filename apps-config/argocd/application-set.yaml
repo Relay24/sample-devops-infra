@@ -27,7 +27,7 @@ spec:
 
   template:
     metadata:
-      name: '{{appName | default(path.basename)}}'
+      name: '{{appName}}'
       labels:
         app-type: '{{appType | default(path.basename)}}'
     spec:
