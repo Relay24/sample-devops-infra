@@ -1,1 +1,6 @@
-# Default values: https://github.com/kubernetes-sigs/metrics-server/blob/master/charts/metrics-server/values.yaml
+apiService:
+  create: true
+
+serviceAccount:
+  create: true
+  name: metrics-server
