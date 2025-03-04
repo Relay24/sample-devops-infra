@@ -25,35 +25,35 @@ variable "subnet_ids" {
 # }
 
 variable "min_size" {
-  type = number
+  type        = number
   description = "Minimum size of the node group."
-  default = 1
+  default     = 1
 }
 
 variable "max_size" {
-  type = number
+  type        = number
   description = "Maximum size of the node group."
-  default = 3
+  default     = 3
 }
 
 variable "desired_size" {
-  type = number
+  type        = number
   description = "Desired size of the node group."
-  default = 1
+  default     = 1
 }
 
 variable "cluster_endpoint_public_access" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "cluster_endpoint_private_access" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "tags" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "A map of tags to add to all resources"
 }
