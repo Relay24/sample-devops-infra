@@ -5,43 +5,36 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - matrix:
-        generators:
-          - git: # Generator for local apps configuration files
-              repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
-              revision: HEAD
-              directories:
-                - path: apps-config/helm-apps/*
-                  metadata:
-                    labels:
-                      app-type: helm
-                - path: apps-config/yaml-apps/*
-                  metadata:
-                    labels:
-                      app-type: yaml
-          - git:  # Generator for external apps configuration files
-              repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
-              revision: HEAD
-              files:
-                - path: "apps-config/external-apps/*.yaml"
+    - git:
+        repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
+        revision: HEAD
+        directories:
+          - path: apps-config/helm-apps/*
+            metadata:
+              labels:
+                app-type: helm
+          - path: apps-config/yaml-apps/*
+            metadata:
+              labels:
+                app-type: yaml
 
   template:
     metadata:
-      name: '{{appName}}'
+      name: '{{path.basename}}'
       labels:
-        app-type: '{{appType | default(path.basename)}}'
+        app-type: '{{appType}}'
     spec:
       project: default
       source:
         repoURL: '{{repoURL}}'
         targetRevision: '{{revision}}'
-        path: '{{appPath | default(path)}}'
+        path: '{{path}}'
         helm:
           valueFiles:
-            - '{{helmValuesFile | default("")}}'
+            - values.yaml
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{appNamespace | default(path.basename)}}'
+        namespace: '{{path.basename}}'
       syncPolicy:
         automated:
           prune: true
