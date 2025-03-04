@@ -8,22 +8,19 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Relay24/sample-devops-infra.git'  # Repository with application-set.yaml
+    repoURL: 'https://github.com/Relay24/sample-devops-infra.git'
     targetRevision: HEAD
-    path: apps-config/argocd # Watch the argocd/ directory (where application-set.yaml and argocd-project.yaml are located)
+    path: apps-config/argocd
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
   syncPolicy:
     automated:
-      prune: true  # Delete resources that do not exist in Git
-      selfHeal: true # Automatically fix differences
-#      pruneLast: true # Configure ArgoCD not to delete itself
-
-  # Ignore differences in the Application resource itself
+      prune: true
+      selfHeal: true
   ignoreDifferences:
     - group: argoproj.io
       kind: Application
-      name: argocd-config  # !!! The name of the SAME bootstrap-app
+      name: argocd-config
       jsonPointers:
-        - /spec  # !!! Ignore ALL changes in spec
+        - /spec
