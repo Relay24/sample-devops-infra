@@ -1,6 +1,3 @@
-apiService:
-  create: true
-
 serviceAccount:
   create: true
   name: metrics-server
