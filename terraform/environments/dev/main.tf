@@ -1,4 +1,3 @@
-
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -9,7 +8,6 @@ module "vpc" {
   public_subnets  = local.public_subnets
   tags            = local.tags
 }
-
 
 module "eks" {
   source = "../../modules/eks"
@@ -28,32 +26,11 @@ module "eks" {
   depends_on                      = [module.vpc]
 }
 
-# module "argocd" {
-#   source = "../../modules/argocd"
-#
-#   cluster_endpoint       = module.eks.cluster_endpoint
-#   cluster_ca_certificate = module.eks.cluster_certificate_authority_data
-#   cluster_auth_token     = data.aws_eks_cluster_auth.this.token
-#   argocd_config_path     = "${path.module}/../../apps-config/argocd"
-#   # oidc_provider_arn = module.eks.oidc_provider_arn # Больше не нужно передавать
-#   region                            = local.eks_version
-#   account_id                        = data.aws_caller_identity.current.account_id
-#   oidc_provider_arn                 = module.eks.oidc_provider_arn
-#   argocd_admin_password_secret_name = "argocd-admin-password"
-#   tags                              = local.tags
-# }
+module "argocd" {
+  source = "../../modules/argocd"
 
-# module "argocd" {
-#   source                 = "../../modules/argocd"
-#   cluster_endpoint       = module.eks.cluster_endpoint
-#   cluster_ca_certificate = module.eks.cluster_certificate_authority_data
-#   cluster_auth_token     = data.aws_eks_cluster_auth.this.token
-#   argocd_config_path     = "${path.module}/../../apps-config/argocd" # путь к argocd-config
-#   argo_cd_values = {
-#     configs = {
-#       params = {
-#         "server.insecure" : true
-#       }
-#     }
-#   }
-# }
+  secret_name      = "argocd-ssh-key" // SHH private key in AWS Secrets Manager
+  git_repo_ssh_url = "git@github.com:Relay24/sample-devops-infra.git"
+
+  depends_on = [module.eks]
+}

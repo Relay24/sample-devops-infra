@@ -1,0 +1,10 @@
+server:
+  extraArgs:
+    - --insecure
+
+configs:
+  repositories: |
+    - url: ${var.git_repo_ssh_url}
+      sshPrivateKeySecret:
+        name: argocd-repo-ssh-key
+        key: ssh-privatekey

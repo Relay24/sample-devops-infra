@@ -25,7 +25,7 @@ terraform {
   #   bucket  = "tf-state-eks-vault-argocd"
   #   encrypt = true
   #   key     = "env/dev/terraform.tfstate"
-  #   region  = "eu-central-1"
+  #   region  = "us-east-1"
   # }
 }
 
