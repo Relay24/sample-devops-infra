@@ -7,8 +7,8 @@ terraform {
   required_providers {
     # https://registry.terraform.io/providers/hashicorp/aws/latest
     aws = {
-      source                = "hashicorp/aws"
-      version               = ">= 5.89.0"
+      source  = "hashicorp/aws"
+      version = ">= 5.89.0"
     }
     # https://registry.terraform.io/providers/hashicorp/helm/latest
     helm = {
