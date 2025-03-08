@@ -37,3 +37,9 @@ variable "cluster_endpoint_private_access" {
   type    = bool
   default = false
 }
+
+variable "vpc_name" {
+  type        = string
+  description = "Name of the VPC"
+  default     = "dev-vpc"
+}

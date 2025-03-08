@@ -1,10 +1,13 @@
+# HA mode without autoscaling
+redis-ha:
+  enabled: true
+controller:
+  replicas: 1
 server:
   extraArgs:
     - --insecure
-
-configs:
-  repositories: |
-    - url: ${var.git_repo_ssh_url}
-      sshPrivateKeySecret:
-        name: argocd-repo-ssh-key
-        key: ssh-privatekey
+  replicas: 2
+repoServer:
+  replicas: 2
+applicationSet:
+  replicas: 2

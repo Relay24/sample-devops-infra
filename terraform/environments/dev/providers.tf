@@ -7,8 +7,8 @@ terraform {
   required_providers {
     # https://registry.terraform.io/providers/hashicorp/aws/latest
     aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.89.0"
+      source                = "hashicorp/aws"
+      version               = ">= 5.89.0"
     }
     # https://registry.terraform.io/providers/hashicorp/helm/latest
     helm = {
@@ -21,13 +21,16 @@ terraform {
       version = ">= 2.36.0"
     }
   }
+
   # backend "s3" {
-  #   bucket  = "tf-state-eks-vault-argocd"
+  #   bucket = "my-temp-terraform-state-bucket-yury"
+  #   key    = "environments/dev/terraform.tfstate"
+  #   region = "us-east-1"
+  #   # dynamodb_table = "my-terraform-state-lock"
   #   encrypt = true
-  #   key     = "env/dev/terraform.tfstate"
-  #   region  = "us-east-1"
   # }
 }
+
 
 data "aws_eks_cluster_auth" "this" {
   name = module.eks.cluster_name

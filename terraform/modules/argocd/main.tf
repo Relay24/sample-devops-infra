@@ -24,11 +24,7 @@ resource "helm_release" "argocd" {
   create_namespace = true
   version    = "7.8.8"
 
-  set {
-    name  = "server.extraArgs[0]"  # Добавляем --insecure
-    value = "--insecure"            # (Удалите для продакшена!)
-  }
-
+  values = [file("${path.module}/values.yaml")]
 }
 
 # ----------------------------------------------------------------------
@@ -44,10 +40,15 @@ resource "kubernetes_secret" "argocd_repo_ssh_key" {
   }
   data = {
     type          = "git"
-    name          = "my-argocd-repo"
+    name          = "root-argocd-repo"
     url           = var.git_repo_ssh_url
     sshPrivateKey = base64decode(jsondecode(data.aws_secretsmanager_secret_version.argocd_secrets_version.secret_string)["ssh-privatekey"])
   }
   type = "Opaque"
   depends_on = [helm_release.argocd, data.aws_secretsmanager_secret_version.argocd_secrets_version]
+}
+
+resource "kubernetes_manifest" "argocd_root_application" {
+  manifest = yamldecode(file("../../../apps-config/argocd/bootstrap-app.yaml"))
+  depends_on = [helm_release.argocd]
 }
