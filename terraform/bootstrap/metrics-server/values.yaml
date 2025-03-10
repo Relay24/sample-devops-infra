@@ -1,0 +1,22 @@
+chart: metrics-server
+repoURL: https://kubernetes-sigs.github.io/metrics-server/
+targetRevision: 3.11.0
+
+replicaCount: 2
+image:
+  repository: registry.k8s.io/metrics-server/metrics-server
+  tag: v0.6.4
+  pullPolicy: IfNotPresent
+
+args:
+  - --kubelet-insecure-tls
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --metric-resolution=30s
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

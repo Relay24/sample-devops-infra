@@ -1,13 +1,5 @@
-# HA mode without autoscaling
-redis-ha:
-  enabled: true
-controller:
-  replicas: 1
 server:
   extraArgs:
     - --insecure
-  replicas: 2
-repoServer:
-  replicas: 2
-applicationSet:
-  replicas: 2
+  ingress:
+    enabled: false

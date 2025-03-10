@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-bootstrap
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  generators:
+    - git:
+        repoURL: ${repo_url}
+        revision: HEAD
+        directories:
+          - path: "terraform/bootstrap/*"
+  template:
+    metadata:
+      name: "{{path.basename}}-bootstrap"
+    spec:
+      project: "default"
+      source:
+        repoURL: ${repo_url}
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: "{{path.basename}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

@@ -31,5 +31,6 @@ module "argocd" {
   source           = "../../modules/argocd"
   secret_name      = "argocd-ssh-key" // SHH private key in AWS Secrets Manager
   git_repo_ssh_url = "git@github.com:Relay24/sample-devops-infra.git"
-  depends_on       = [module.eks]
+
+  depends_on = [module.eks]
 }
