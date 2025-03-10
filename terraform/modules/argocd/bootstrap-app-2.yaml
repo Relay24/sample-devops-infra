@@ -14,13 +14,16 @@ spec:
           - path: "terraform/bootstrap/*"
   template:
     metadata:
-      name: "{{path.basename}}"
+      name: "{{path.basename}}-bootstrap"
     spec:
       project: "default"
       source:
         repoURL: "git@github.com:Relay24/sample-devops-infra.git"
         targetRevision: HEAD
         path: "{{path}}"
+        # helm:  <-- УДАЛИТЬ ЭТУ СЕКЦИЮ!
+        #   valueFiles:
+        #     - values.yaml
       destination:
         server: "https://kubernetes.default.svc"
         namespace: "{{path.basename}}"

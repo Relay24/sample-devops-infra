@@ -1,0 +1,10 @@
+apiVersion: v2
+name: metrics-server
+description: A Helm chart for Kubernetes Metrics Server
+version: 0.1.0
+appVersion: "v0.6.4"
+
+dependencies: та
+  - name: metrics-server
+    version: 3.11.0
+    repository: https://kubernetes-sigs.github.io/metrics-server/
