@@ -3,3 +3,9 @@ server:
     - --insecure
   ingress:
     enabled: false
+
+configs:
+  repositories:
+    - type: git
+      url: ${repo_url}
+

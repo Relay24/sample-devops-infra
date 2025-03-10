@@ -21,14 +21,6 @@ terraform {
       version = ">= 2.36.0"
     }
   }
-
-  # backend "s3" {
-  #   bucket = "my-temp-terraform-state-bucket-yury"
-  #   key    = "environments/dev/terraform.tfstate"
-  #   region = "us-east-1"
-  #   # dynamodb_table = "my-terraform-state-lock"
-  #   encrypt = true
-  # }
 }
 
 
@@ -40,24 +32,28 @@ provider "helm" {
   kubernetes {
     host                   = module.eks.cluster_endpoint
     cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    #     token                  = data.aws_eks_cluster_auth.this.token
+    token                  = data.aws_eks_cluster_auth.this.token
 
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      command     = "aws"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-    }
+    # exec {
+    #   api_version = "client.authentication.k8s.io/v1beta1"
+    #   command     = "aws"
+    #   args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+    # }
   }
 }
 
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  #   token                  = data.aws_eks_cluster_auth.this.token
+  token                  = data.aws_eks_cluster_auth.this.token
 
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-    command     = "aws"
-  }
+  # exec {
+  #   api_version = "client.authentication.k8s.io/v1beta1"
+  #   args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  #   command     = "aws"
+  # }
+}
+
+resource "null_resource" "eks_module_ready" {
+  depends_on = [module.eks]
 }

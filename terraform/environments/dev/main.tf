@@ -23,7 +23,6 @@ module "eks" {
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
   tags                            = local.tags
-  # depends_on                      = [module.vpc]
 }
 
 # --- ArgoCD ---
@@ -32,5 +31,13 @@ module "argocd" {
   secret_name      = "argocd-ssh-key" // SHH private key in AWS Secrets Manager
   git_repo_ssh_url = "git@github.com:Relay24/sample-devops-infra.git"
 
-  depends_on = [module.eks]
+  # cluster_endpoint                   = module.eks.cluster_endpoint
+  # cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+  # cluster_name                       = module.eks.cluster_name
+
+  kubernetes_host                    = module.eks.cluster_endpoint
+  kubernetes_cluster_ca_certificate  = module.eks.cluster_certificate_authority_data
+  kubernetes_token                   = data.aws_eks_cluster_auth.this.token
+
+  # depends_on = [module.eks]
 }

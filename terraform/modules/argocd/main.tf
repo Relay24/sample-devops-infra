@@ -13,9 +13,6 @@
 #   values = [file("${path.module}/values.yaml")]
 # }
 
-# Провайдеры (AWS, Helm, Kubernetes)
-
-# EKS кластер, IAM роли (для ArgoCD)
 
 # Установка ArgoCD (минимальная, с --insecure)
 resource "helm_release" "argocd_bootstrap" {
@@ -23,7 +20,7 @@ resource "helm_release" "argocd_bootstrap" {
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
   namespace  = "argocd"
-  version    = "7.8.8"
+  version    = "7.8.9"
 
   set {
     name  = "server.serviceAccount.create"
@@ -43,43 +40,6 @@ resource "helm_release" "argocd_bootstrap" {
   values           = [file("${path.module}/values.yaml")]
   create_namespace = true
 }
-
-resource "kubernetes_manifest" "argocd_bootstrap_app" {
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
-    metadata = {
-      name      = "argocd-bootstrap"
-      namespace = "argocd"
-      finalizers = [
-        "resources-finalizer.argocd.argoproj.io"
-      ]
-    }
-    spec = {
-      project = "default"
-      source = {
-        repoURL        = var.git_repo_ssh_url
-        targetRevision = "HEAD"
-        path           = "bootstrap/*" #  bootstrap-manifest
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = "argocd"
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
-        }
-        syncOptions = [
-          "CreateNamespace=true"
-        ]
-      }
-    }
-  }
-  depends_on = [helm_release.argocd_bootstrap]
-}
-
 
 # ----------------------------------------------------------------------
 # Retrieve secret from AWS Secrets Manager
@@ -116,11 +76,51 @@ resource "kubernetes_secret" "argocd_repo_ssh_key" {
   depends_on = [helm_release.argocd_bootstrap, data.aws_secretsmanager_secret_version.argocd_secrets_version]
 }
 
+# resource "kubernetes_manifest" "argocd_bootstrap_appset" {
+#   provider = kubernetes
+#   manifest = yamldecode(templatefile("bootstrap-app.yaml", {
+#     repo_url = var.git_repo_ssh_url
+#   }))
+#   depends_on = [helm_release.argocd_bootstrap]
+# }
+
 resource "kubernetes_manifest" "argocd_bootstrap_appset" {
-  manifest = yamldecode(file("${path.module}/bootstrap-app.yaml"))
+  provider = kubernetes
+  manifest = yamldecode(<<YAML
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-bootstrap
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  generators:
+    - git:
+        repoURL: "${var.git_repo_ssh_url}"
+        revision: HEAD
+        directories:
+          - path: "terraform/bootstrap/*"
+  template:
+    metadata:
+      name: "{{path.basename}}-bootstrap"
+    spec:
+      project: "default"
+      source:
+        repoURL: "${var.git_repo_ssh_url}"
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: "{{path.basename}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+YAML
+  )
+  depends_on = [helm_release.argocd_bootstrap]
 }
 
-# resource "kubernetes_manifest" "argocd_root_application" {
-#   manifest = yamldecode(file("../../../apps-config/bootstrap-app.yaml"))
-#   depends_on = [helm_release.argocd]
-# }
